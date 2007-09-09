@@ -1,16 +1,12 @@
-%define name	netpbm
-%define version 10.34
-%define release %mkrel 4
-
-%define major	10
-%define libname	%mklibname %{name} %{major}
-%define	libname_devel	%{libname}-devel
-%define libname_static_devel	%{libname}-static-devel
+%define major 10
+%define libname %mklibname %{name} %{major}
+%define develname %mklibname %{name} -d
+%define staticdevelname %mklibname %{name} -d -s
 
 Summary:	Tools for manipulating graphics files in netpbm supported formats
-Name:		%{name}
-Version:	%{version}
-Release:	%{release}
+Name:		netpbm
+Version:	10.34
+Release:	%mkrel 5
 License:	GPL Artistic MIT
 Group:		Graphics
 
@@ -58,15 +54,16 @@ programs for handling various graphics file formats, including .pbm
 (portable bitmaps), .pgm (portable graymaps), .pnm (portable anymaps),
 .ppm (portable pixmaps) and others.
 
-%package -n	%{libname_devel}
+%package -n	%{develname}
 Summary:	Development tools for programs which will use the netpbm libraries
 Group:		Development/C
 Requires:	%{libname} = %{version}
 Provides:	lib%{name}-devel
 Obsoletes:	libgr-devel libgr1-devel libnetpbm1-devel
 Provides:	libgr-devel libgr1-devel libnetpbm1-devel netpbm-devel
+Obsoletes:	%{mklibname %{name} 10 -d}
 
-%description -n	%{libname_devel}
+%description -n	%{develname}
 The netpbm-devel package contains the header files and programmer's
 documentation for developing programs which can handle the various
 graphics file formats supported by the netpbm libraries.
@@ -75,16 +72,16 @@ Install netpbm-devel if you want to develop programs for handling the
 graphics file formats supported by the netpbm libraries. You'll also
 need to have the netpbm package installed.
 
-
-%package -n	%{libname_static_devel}
+%package -n	%{staticdevelname}
 Summary:	Static libraries for the netpbm libraries
 Group:		Development/C
 Requires:	%{libname}-devel = %{version}
 Provides:	lib%{name}-static-devel
 Obsoletes:	libgr-static-devel libgr1-static-devel libnetpbm1-static-devel
 Provides:	libgr-static-devel libgr1-static-devel libnetpbm1-static-devel netpbm-static-devel
+Obsoletes:	%{mklibname %{name} 10 -d -s}
 
-%description -n	%{libname_static_devel}
+%description -n	%{staticdevelname}
 The netpbm-devel package contains the static libraries (.a)
 for developing programs which can handle the various
 graphics file formats supported by the netpbm libraries.
@@ -93,8 +90,8 @@ Install netpbm-devel if you want to develop programs for handling the
 graphics file formats supported by the netpbm libraries. You'll also
 need to have the netpbm package installed.
 
-
 %prep
+
 %setup -q -a 2
 %patch0 -p1 -b .time
 %patch1 -p1 -b .strip
@@ -191,6 +188,7 @@ cp test-images/* %buildroot/usr/share/printconf/tests/
 rm -rf $RPM_BUILD_ROOT
 
 %post   -n %{libname} -p /sbin/ldconfig
+
 %postun -n %{libname} -p /sbin/ldconfig
 
 %files 	-n %{libname}
@@ -198,7 +196,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/lib*.so.*
 %doc doc/*
 
-%files 	-n %{libname_devel}
+%files 	-n %{develname}
 %defattr(-,root,root)
 %doc doc/COPYRIGHT.PATENT doc/Netpbm.programming
 %{_includedir}/*.h
@@ -206,7 +204,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/lib*.so
 %{_mandir}/man3/*
 
-%files 	-n %{libname_static_devel}
+%files 	-n %{staticdevelname}
 %defattr(-,root,root)
 %doc doc/COPYRIGHT.PATENT
 %{_libdir}/*.a
@@ -222,5 +220,3 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/printconf/tests
 %{_datadir}/printconf/mf_rules/*
 %{_datadir}/printconf/tests/*
-
-
