@@ -6,7 +6,7 @@
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
 Version:	10.34
-Release:	%mkrel 8
+Release:	%mkrel 9
 License:	GPL Artistic MIT
 Group:		Graphics
 
@@ -75,7 +75,7 @@ need to have the netpbm package installed.
 %package -n	%{staticdevelname}
 Summary:	Static libraries for the netpbm libraries
 Group:		Development/C
-Requires:	%{libname}-devel = %{version}
+Requires:	%{develname} = %{version}
 Provides:	lib%{name}-static-devel
 Obsoletes:	libgr-static-devel libgr1-static-devel libnetpbm1-static-devel
 Provides:	libgr-static-devel libgr1-static-devel libnetpbm1-static-devel netpbm-static-devel
