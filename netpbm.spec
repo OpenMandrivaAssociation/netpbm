@@ -6,10 +6,10 @@
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
 Version:	10.34
-Release:	%mkrel 9
+Release:	%mkrel 10
 License:	GPL Artistic MIT
 Group:		Graphics
-
+URL:		http://netpbm.sourceforge.net/
 Source0:	http://prdownloads.sourceforge.net/netpbm/%{name}-%{version}.tar.bz2
 Source1:	mf50-netpbm_filters
 Source2:	test-images.tar.bz2
@@ -21,19 +21,25 @@ Patch4:		netpbm-10.22-security2.patch
 Patch5:		netpbm-10.22-cmapsize.patch
 Patch6:		netpbm-10.30-gcc4.patch
 Patch7:		netpbm-10.34-security.patch
+Patch8:		netpbm-systemlibs.diff
 Patch11:	netpbm-10.24-nodoc.patch
 Patch13:	netpbm-10.34-bmptopnm.patch
 Patch14:	netpbm-10.28-CAN-2005-2471.patch
 Patch15: 	netpbm-10.33-ppmtompeg.patch
-
-BuildRequires:	flex png-devel jpeg-devel tiff-devel
-BuildRequires:	libx11-devel libxml2-devel
-Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+Patch16:	libjasper-1.701.0-CVE-2007-2721.patch
+BuildRequires:	flex
+BuildRequires:	jasper-devel
+BuildRequires:	jbig-devel
+BuildRequires:	jpeg-devel
+BuildRequires:	libx11-devel
+BuildRequires:	libxml2-devel
+BuildRequires:	png-devel
+BuildRequires:	tiff-devel
 Requires:	%{libname} = %{version}
 Obsoletes:	libgr-progs libgr1-progs
 Provides:	libgr-progs libgr1-progs
 BuildConflicts:	svgalib-devel
-Url:		http://netpbm.sourceforge.net/
+Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 The netpbm package contains a library of functions which support
@@ -99,16 +105,22 @@ need to have the netpbm package installed.
 %patch4 -p1 -b .security2
 %patch5 -p1 -b .cmapsize
 %patch7 -p1 -b .security
+%patch8 -p0 -b .systemlibs
 %patch6 -p1 -b .gcc4
 %patch11 -p1 -b .nodoc
 %patch13 -p1 -b .bmptopnm
 %patch14 -p1 -b .CAN-2005-2471
 %patch15 -p1 -b .ppmtompeg
+pushd converter/other/jpeg2000
+%patch16 -p1 -b .cve-2007-2721
+popd
 
 tar xjf %{SOURCE2}
 chmod 0644 doc/*
 
 %build
+%serverbuild
+
 ./configure <<EOF
 
 
@@ -133,59 +145,67 @@ EOF
 
 TOP=`pwd`
 make \
-	CC=%{__cc} \
-	CFLAGS="$RPM_OPT_FLAGS -fPIC" \
-	LDFLAGS="-L$TOP/pbm -L$TOP/pgm -L$TOP/pnm -L$TOP/ppm" \
-	JPEGINC_DIR=%{_includedir} \
-	PNGINC_DIR=%{_includedir} \
-	TIFFINC_DIR=%{_includedir} \
-	JPEGLIB_DIR=%{_libdir} \
-	PNGLIB_DIR=%{_libdir} \
-	LINUXSVGALIB="NONE" \
-	X11LIB=%{_libdir}/libX11.so \
-	TIFFLIB_DIR=%{_libdir}
+    CC=%{__cc} \
+    CFLAGS="$CFLAGS -fPIC" \
+    LDFLAGS="-L$TOP/pbm -L$TOP/pgm -L$TOP/pnm -L$TOP/ppm" \
+    TIFFLIB=-ltiff \
+    TIFFHDR_DIR=%{_includedir} \
+    JPEGLIB=-ljpeg \
+    JPEGHDR_DIR=%{_includedir} \
+    PNGLIB=-lpng \
+    PNGHDR_DIR=%{_includedir} \
+    ZLIB=-lz \
+    ZHDR_DIR=%{_includedir} \
+    JBIGLIB=-ljbig \
+    JBIGHDR_DIR=%{_includedir} \
+    JASPERLIB=-ljasper \
+    JASPERHDR_DIR=%{_includedir} \
+    JASPERDEPLIBS=-ljpeg \
+    X11LIB=-lX11 \
+    X11HDR_DIR=%{_includedir} \
+    LINUXSVGALIB="NONE"
 
 %install
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
-mkdir -p $RPM_BUILD_ROOT
-make package pkgdir=$RPM_BUILD_ROOT%{_prefix} LINUXSVGALIB="NONE"
+mkdir -p %{buildroot}
+make package pkgdir=%{buildroot}%{_prefix} LINUXSVGALIB="NONE"
 
 # Ugly hack to have libs in correct dir on 64bit archs.
-mkdir -p $RPM_BUILD_ROOT%{_libdir}
+mkdir -p %{buildroot}%{_libdir}
 if [ "%{_libdir}" != "/usr/lib" ]; then
-  mv $RPM_BUILD_ROOT/usr/lib/lib* $RPM_BUILD_ROOT%{_libdir}
+  mv %{buildroot}/usr/lib/lib* %{buildroot}%{_libdir}
 fi
 
-cp -af lib/libnetpbm.a $RPM_BUILD_ROOT%{_libdir}/libnetpbm.a
-ln -sf libnetpbm.so.%{major} $RPM_BUILD_ROOT%{_libdir}/libnetpbm.so
+cp -af lib/libnetpbm.a %{buildroot}%{_libdir}/libnetpbm.a
+ln -sf libnetpbm.so.%{major} %{buildroot}%{_libdir}/libnetpbm.so
 
-mkdir -p $RPM_BUILD_ROOT%{_mandir}
-tar jxf %{SOURCE3} -C $RPM_BUILD_ROOT%{_mandir}
+mkdir -p %{buildroot}%{_mandir}
+tar jxf %{SOURCE3} -C %{buildroot}%{_mandir}
 
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/%{name}-%{version}
-mv $RPM_BUILD_ROOT/usr/misc/*.map $RPM_BUILD_ROOT%{_datadir}/%{name}-%{version}
-rm -rf $RPM_BUILD_ROOT/usr/README
-rm -rf $RPM_BUILD_ROOT/usr/VERSION
-rm -rf $RPM_BUILD_ROOT/usr/link
-rm -rf $RPM_BUILD_ROOT/usr/misc
-rm -rf $RPM_BUILD_ROOT/usr/man
-rm -rf $RPM_BUILD_ROOT/usr/pkginfo
-rm -rf $RPM_BUILD_ROOT/usr/config_template
+mkdir -p %{buildroot}%{_datadir}/%{name}-%{version}
+mv %{buildroot}/usr/misc/*.map %{buildroot}%{_datadir}/%{name}-%{version}
+rm -rf %{buildroot}/usr/README
+rm -rf %{buildroot}/usr/VERSION
+rm -rf %{buildroot}/usr/link
+rm -rf %{buildroot}/usr/misc
+rm -rf %{buildroot}/usr/man
+rm -rf %{buildroot}/usr/pkginfo
+rm -rf %{buildroot}/usr/config_template
 
 
-mkdir -p %buildroot/usr/share/printconf/mf_rules
-cp %{SOURCE1} %buildroot/usr/share/printconf/mf_rules/
+mkdir -p %{buildroot}/usr/share/printconf/mf_rules
+cp %{SOURCE1} %{buildroot}/usr/share/printconf/mf_rules/
 
-mkdir -p %buildroot/usr/share/printconf/tests
-cp test-images/* %buildroot/usr/share/printconf/tests/
+mkdir -p %{buildroot}/usr/share/printconf/tests
+cp test-images/* %{buildroot}/usr/share/printconf/tests/
 
 # multiarch policy
-%multiarch_includes $RPM_BUILD_ROOT%{_includedir}/pm_config.h
+%multiarch_includes %{buildroot}%{_includedir}/pm_config.h
 
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %post   -n %{libname} -p /sbin/ldconfig
 
@@ -201,7 +221,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc doc/COPYRIGHT.PATENT doc/Netpbm.programming
 %{_includedir}/*.h
 %multiarch %{multiarch_includedir}/pm_config.h
-%attr(755,root,root) %{_libdir}/lib*.so
+%attr(0755,root,root) %{_libdir}/lib*.so
 %{_mandir}/man3/*
 
 %files 	-n %{staticdevelname}
@@ -212,7 +232,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root)
 %doc doc/COPYRIGHT.PATENT
-%attr(755,root,root) %{_bindir}/*
+%attr(0755,root,root) %{_bindir}/*
 %{_mandir}/man[15]/*
 %{_datadir}/%{name}-%{version}
 %dir %{_datadir}/printconf
