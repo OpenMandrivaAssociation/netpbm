@@ -39,7 +39,6 @@ Requires:	%{libname} = %{version}
 Obsoletes:	libgr-progs libgr1-progs
 Provides:	libgr-progs libgr1-progs
 BuildConflicts:	svgalib-devel
-Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 The netpbm package contains a library of functions which support
