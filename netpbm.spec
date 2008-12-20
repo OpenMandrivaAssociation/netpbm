@@ -5,7 +5,7 @@
 
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
-Version:	10.35.53
+Version:	10.35.57
 Release:	%mkrel 1
 License:	GPL Artistic MIT
 Group:		Graphics
@@ -35,7 +35,7 @@ Patch17:	netpbm-10.35-pbmtomacp.patch
 Patch18:	netpbm-10.35-glibc.patch
 Patch19:	netpbm-10.35-gcc43.patch
 Patch20:	netpbm-10.35-rgbtxt.patch
-Patch21:	netpbm-10.35-pamcomp.patch
+Patch21:	netpbm-10.35.57-format_not_a_string_literal_and_no_format_arguments.diff
 Requires:	%{libname} = %{version}
 BuildRequires:	flex
 BuildRequires:	jasper-devel
@@ -134,7 +134,7 @@ done
 %patch18 -p1 -b .glibc
 %patch19 -p1 -b .gcc43
 %patch20 -p1 -b .rgbtxt
-%patch21 -p1 -b .pamcomp
+%patch21 -p1 -b .format_not_a_string_literal_and_no_format_arguments
 
 ##mv shhopt/shhopt.h shhopt/pbmshhopt.h
 ##perl -pi -e 's|shhopt.h|pbmshhopt.h|g' `find -name "*.c" -o -name "*.h"` ./GNUmakefile
@@ -168,7 +168,7 @@ EOF
 TOP=`pwd`
 make \
     CC="%{__cc}" \
-    LDFLAGS="-L$TOP/pbm -L$TOP/pgm -L$TOP/pnm -L$TOP/ppm" \
+    LDFLAGS="-L$TOP/pbm -L$TOP/pgm -L$TOP/pnm -L$TOP/ppm %ldflags" \
     CFLAGS="$CFLAGS -fPIC" \
     LADD="-lm" \
     TIFFLIB_DIR=%{_libdir} TIFFLIB=-ltiff TIFFINC_DIR=%{_includedir} TIFFHDR_DIR=%{_includedir} \
