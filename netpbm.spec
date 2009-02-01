@@ -5,8 +5,8 @@
 
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
-Version:	10.35.57
-Release:	%mkrel 2
+Version:	10.35.59
+Release:	%mkrel 1
 License:	GPL Artistic MIT
 Group:		Graphics
 URL:		http://netpbm.sourceforge.net/
@@ -35,7 +35,12 @@ Patch17:	netpbm-10.35-pbmtomacp.patch
 Patch18:	netpbm-10.35-glibc.patch
 Patch19:	netpbm-10.35-gcc43.patch
 Patch20:	netpbm-10.35-rgbtxt.patch
-Patch21:	netpbm-10.35.57-format_not_a_string_literal_and_no_format_arguments.diff
+Patch21:	netpbm-10.35-pamtosvgsegfault.patch
+Patch22:	netpbm-10.35-pnmmontagefix.patch
+Patch23:	netpbm-10.35-pnmtofiasco-stdin.patch
+Patch24:	netpbm-10.35-64bitfix.patch
+Patch25:	netpbm-10.35-ximtoppmsegfault.patch
+Patch100:	netpbm-10.35.57-format_not_a_string_literal_and_no_format_arguments.diff
 Requires:	%{libname} = %{version}
 BuildRequires:	flex
 BuildRequires:	jasper-devel
@@ -134,7 +139,12 @@ done
 %patch18 -p1 -b .glibc
 %patch19 -p1 -b .gcc43
 %patch20 -p1 -b .rgbtxt
-%patch21 -p1 -b .format_not_a_string_literal_and_no_format_arguments
+%patch21 -p1 -b .pamtosvgsegfault
+%patch22 -p1 -b .pnmmontagefix
+%patch23 -p1 -b .pnmtofiasco-stdin
+%patch24 -p1 -b .64bitfix
+%patch25 -p1 -b .ximtoppmsegfault
+%patch100 -p1 -b .format_not_a_string_literal_and_no_format_arguments
 
 ##mv shhopt/shhopt.h shhopt/pbmshhopt.h
 ##perl -pi -e 's|shhopt.h|pbmshhopt.h|g' `find -name "*.c" -o -name "*.h"` ./GNUmakefile
