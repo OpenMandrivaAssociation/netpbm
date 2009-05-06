@@ -5,7 +5,7 @@
 
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
-Version:	10.35.59
+Version:	10.35.62
 Release:	%mkrel 1
 License:	GPL Artistic MIT
 Group:		Graphics
@@ -30,7 +30,6 @@ Patch12:	netpbm-10.33-ppmtompeg.patch
 Patch13:	netpbm-10.33-multilib.patch
 Patch14:	netpbm-10.34-pamscale.patch
 Patch15:	netpbm-10.35-ppmquantall.patch
-Patch16:	netpbm-10.35-pbmtog3segfault.patch
 Patch17:	netpbm-10.35-pbmtomacp.patch
 Patch18:	netpbm-10.35-glibc.patch
 Patch19:	netpbm-10.35-gcc43.patch
@@ -40,6 +39,11 @@ Patch22:	netpbm-10.35-pnmmontagefix.patch
 Patch23:	netpbm-10.35-pnmtofiasco-stdin.patch
 Patch24:	netpbm-10.35-64bitfix.patch
 Patch25:	netpbm-10.35-ximtoppmsegfault.patch
+Patch26:	netpbm-10.35-ppmfadeusage.patch
+Patch27:	netpbm-10.35-ppmrainbowexit.patch
+Patch28:	netpbm-10.35-ppmdfontfix.patch
+Patch29:	netpbm-10.35-svgtopam.patch
+Patch30:	netpbm-10.35-docfix.patch
 Patch100:	netpbm-10.35.57-format_not_a_string_literal_and_no_format_arguments.diff
 Requires:	%{libname} = %{version}
 BuildRequires:	flex
@@ -134,7 +138,6 @@ done
 %patch13 -p1 -b .multilib
 %patch14 -p1 -b .pamscale
 %patch15 -p1 -b .pqall
-%patch16 -p1 -b .pbmtog3segfault
 %patch17 -p1 -b .pbmtomacp
 %patch18 -p1 -b .glibc
 %patch19 -p1 -b .gcc43
@@ -144,6 +147,12 @@ done
 %patch23 -p1 -b .pnmtofiasco-stdin
 %patch24 -p1 -b .64bitfix
 %patch25 -p1 -b .ximtoppmsegfault
+%patch26 -p1 -b .ppmfadeusage
+%patch27 -p1 -b .ppmrainbowexit
+%patch28 -p1 -b .ppmdfontfix
+%patch29 -p1 -b .svgtopam
+%patch30 -p1 -b .docfix
+
 %patch100 -p1 -b .format_not_a_string_literal_and_no_format_arguments
 
 ##mv shhopt/shhopt.h shhopt/pbmshhopt.h
