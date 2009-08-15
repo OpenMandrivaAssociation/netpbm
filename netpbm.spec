@@ -6,7 +6,7 @@
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
 Version:	10.35.64
-Release:	%mkrel 2
+Release:	%mkrel 3
 License:	GPL Artistic MIT
 Group:		Graphics
 URL:		http://netpbm.sourceforge.net/
@@ -37,6 +37,7 @@ Patch23:	netpbm-10.35-pnmtofiasco-stdin.patch
 Patch24:	netpbm-10.35-64bitfix.patch
 Patch25:	netpbm-10.35-ximtoppmsegfault.patch
 Patch29:	netpbm-10.35-svgtopam.patch
+Patch30:	netpbm-10.35.64-jpeg-7.diff
 Patch100:	netpbm-10.35.57-format_not_a_string_literal_and_no_format_arguments.diff
 Requires:	%{libname} = %{version}
 BuildRequires:	flex
@@ -138,6 +139,7 @@ done
 %patch24 -p1 -b .64bitfix
 %patch25 -p0 -b .ximtoppmsegfault
 %patch29 -p1 -b .svgtopam
+%patch30 -p0 -b .jpeg-7
 
 %patch100 -p1 -b .format_not_a_string_literal_and_no_format_arguments
 
