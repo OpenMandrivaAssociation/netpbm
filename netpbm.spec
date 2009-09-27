@@ -6,7 +6,7 @@
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
 Version:	10.35.64
-Release:	%mkrel 3
+Release:	%mkrel 4
 License:	GPL Artistic MIT
 Group:		Graphics
 URL:		http://netpbm.sourceforge.net/
@@ -52,7 +52,7 @@ BuildRequires:	png-devel
 BuildRequires:	python
 BuildRequires:	python-devel
 BuildRequires:	tiff-devel
-BuildRequires:	X11-devel
+BuildRequires:	libx11-devel
 BuildConflicts:	svgalib-devel
 Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
