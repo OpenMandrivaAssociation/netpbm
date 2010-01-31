@@ -29,11 +29,10 @@ Patch10:	netpbm-ppmtompeg.patch
 Patch11:	netpbm-multilib.patch
 Patch12:	netpbm-pamscale.patch
 Patch13:	netpbm-glibc.patch
-Patch14:	netpbm-pnmtofiasco-stdin.patch
-Patch15:	netpbm-svgtopam.patch
-Patch16:	netpbm-docfix.patch
-Patch17:	netpbm-ppmfadeusage.patch
-Patch18:	netpbm-fiasco-overflow.patch
+Patch14:	netpbm-svgtopam.patch
+Patch15:	netpbm-docfix.patch
+Patch16:	netpbm-ppmfadeusage.patch
+Patch17:	netpbm-fiasco-overflow.patch
 Patch100:	netpbm-10.35.57-format_not_a_string_literal_and_no_format_arguments.diff
 Requires:	%{libname} = %{version}
 BuildRequires:	flex
@@ -127,11 +126,10 @@ done
 %patch11 -p1 -b .multilib
 %patch12 -p1 -b .pamscale
 %patch13 -p1 -b .glibc
-%patch14 -p1 -b .pnmtofiasco-stdin
-%patch15 -p1 -b .svgtopam
-%patch16 -p1 -b .docfix
-%patch17 -p1 -b .ppmfadeusage
-%patch18 -p1 -b .fiasco-overflow
+%patch14 -p1 -b .svgtopam
+%patch15 -p1 -b .docfix
+%patch16 -p1 -b .ppmfadeusage
+%patch17 -p1 -b .fiasco-overflow
 %patch100 -p1 -b .format_not_a_string_literal_and_no_format_arguments
 
 sed -i 's/STRIPFLAG = -s/STRIPFLAG =/g' config.mk.in
