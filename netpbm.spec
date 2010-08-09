@@ -5,7 +5,7 @@
 
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
-Version:	10.47.09
+Version:	10.47.17
 Release:	%mkrel 1
 License:	GPL Artistic MIT
 Group:		Graphics
@@ -25,7 +25,6 @@ Patch6:		netpbm-gcc4.patch
 Patch7:		netpbm-bmptopnm.patch
 Patch8:		netpbm-CAN-2005-2471.patch
 Patch9:		netpbm-xwdfix.patch
-Patch10:	netpbm-ppmtompeg.patch
 Patch11:	netpbm-multilib.patch
 Patch12:	netpbm-pamscale.patch
 Patch13:	netpbm-glibc.patch
@@ -33,6 +32,11 @@ Patch14:	netpbm-svgtopam.patch
 Patch15:	netpbm-docfix.patch
 Patch16:	netpbm-ppmfadeusage.patch
 Patch17:	netpbm-fiasco-overflow.patch
+Patch18:	netpbm-lz.patch
+Patch19:	netpbm-pnmmontagefix.patch
+Patch20:	netpbm-noppmtompeg.patch
+Patch21:	netpbm-cmuwtopbm.patch
+Patch22:	netpbm-pamtojpeg2k.patch
 Patch100:	netpbm-10.35.57-format_not_a_string_literal_and_no_format_arguments.diff
 Requires:	%{libname} = %{version}
 BuildRequires:	flex
@@ -122,7 +126,6 @@ done
 %patch7 -p1 -b .bmptopnm
 %patch8 -p1 -b .CAN-2005-2471
 %patch9 -p1 -b .xwdfix
-%patch10 -p1 -b .ppmtompeg
 %patch11 -p1 -b .multilib
 %patch12 -p1 -b .pamscale
 %patch13 -p1 -b .glibc
@@ -130,6 +133,11 @@ done
 %patch15 -p1 -b .docfix
 %patch16 -p1 -b .ppmfadeusage
 %patch17 -p1 -b .fiasco-overflow
+%patch18 -p1 -b .lz
+%patch19 -p1 -b .pnmmmontagefix
+%patch20 -p1 -b .noppmtompeg
+%patch21 -p1 -b .cmuwtopbmfix
+%patch22 -p1 -b .pamtojpeg2kfix
 %patch100 -p1 -b .format_not_a_string_literal_and_no_format_arguments
 
 sed -i 's/STRIPFLAG = -s/STRIPFLAG =/g' config.mk.in
