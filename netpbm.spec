@@ -5,7 +5,7 @@
 
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
-Version:	10.47.20
+Version:	10.47.21
 Release:	%mkrel 1
 License:	GPL Artistic MIT
 Group:		Graphics
@@ -13,6 +13,8 @@ URL:		http://netpbm.sourceforge.net/
 # Source0 is prepared by
 # svn checkout https://netpbm.svn.sourceforge.net/svnroot/netpbm/stable netpbm-%{version}
 # svn checkout https://netpbm.svn.sourceforge.net/svnroot/netpbm/userguide netpbm-%{version}/userguide
+# and removing the .svn directories ( find -name "\.svn" -type d -print0 | xargs -0 rm -rf )
+# and removing the ppmtompeg code, due to patents ( rm -rf netpbm-%{version}/converter/ppm/ppmtompeg/ )
 Source0:	netpbm-%{version}.tar.xz
 Source1:	mf50-netpbm_filters
 Source2:	test-images.tar.bz2
@@ -235,6 +237,7 @@ rm -rf %{buildroot}%{_prefix}/misc
 rm -rf %{buildroot}%{_prefix}/man
 rm -rf %{buildroot}%{_prefix}/pkginfo
 rm -rf %{buildroot}%{_prefix}/config_template
+rm -f %{buildroot}%{_mandir}/man1/ppmtompeg.1*
 
 install -d %{buildroot}%{_datadir}/printconf/mf_rules
 cp %{SOURCE1} %{buildroot}%{_datadir}/printconf/mf_rules/
