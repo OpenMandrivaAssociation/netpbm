@@ -6,7 +6,7 @@
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
 Version:	10.47.21
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	GPL Artistic MIT
 Group:		Graphics
 URL:		http://netpbm.sourceforge.net/
@@ -278,7 +278,7 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %dir %{_includedir}/netpbm
 %{_includedir}/netpbm/*.h
-%multiarch %{multiarch_includedir}/netpbm/pm_config.h
+%{multiarch_includedir}/netpbm/pm_config.h
 %attr(0755,root,root) %{_libdir}/lib*.so
 %{_mandir}/man3/*
 
