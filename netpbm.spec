@@ -5,8 +5,8 @@
 
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
-Version:	10.47.21
-Release:	%mkrel 2
+Version:	10.47.27
+Release:	%mkrel 1
 License:	GPL Artistic MIT
 Group:		Graphics
 URL:		http://netpbm.sourceforge.net/
@@ -39,6 +39,7 @@ Patch19:	netpbm-pnmmontagefix.patch
 Patch20:	netpbm-noppmtompeg.patch
 Patch21:	netpbm-cmuwtopbm.patch
 Patch22:	netpbm-pamtojpeg2k.patch
+Patch23:	netpbm-manfix.patch
 Patch100:	netpbm-10.35.57-format_not_a_string_literal_and_no_format_arguments.diff
 Requires:	%{libname} = %{version}
 BuildRequires:	flex
@@ -140,6 +141,8 @@ done
 %patch20 -p1 -b .noppmtompeg
 %patch21 -p1 -b .cmuwtopbmfix
 %patch22 -p1 -b .pamtojpeg2kfix
+%patch23 -p1 -b .manfix
+
 %patch100 -p1 -b .format_not_a_string_literal_and_no_format_arguments
 
 sed -i 's/STRIPFLAG = -s/STRIPFLAG =/g' config.mk.in
