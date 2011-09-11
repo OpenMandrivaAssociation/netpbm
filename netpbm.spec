@@ -5,7 +5,7 @@
 
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
-Version:	10.47.29
+Version:	10.47.30
 Release:	%mkrel 1
 License:	GPL Artistic MIT
 Group:		Graphics
