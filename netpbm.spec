@@ -18,6 +18,11 @@ URL:		http://netpbm.sourceforge.net/
 Source0:	netpbm-%{version}.tar.xz
 Source1:	mf50-netpbm_filters
 Source2:	test-images.tar.bz2
+
+# FIXME - files from netpbm trunk
+Source3:	netpbm-png.tar.bz2
+Patch1000:	netpbm-png.patch
+
 Patch1:		netpbm-time.patch
 Patch2:		netpbm-message.patch
 Patch3:		netpbm-security-scripts.patch
@@ -110,7 +115,7 @@ netpbm package installed.
 
 %prep
 
-%setup -q -a2
+%setup -q -a2 -a3
 
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
@@ -145,6 +150,8 @@ done
 
 %patch100 -p1 -b .format_not_a_string_literal_and_no_format_arguments
 
+%patch1000 -p1
+
 sed -i 's/STRIPFLAG = -s/STRIPFLAG =/g' config.mk.in
 
 ##mv shhopt/shhopt.h shhopt/pbmshhopt.h
@@ -176,11 +183,13 @@ sed -i 's/STRIPFLAG = -s/STRIPFLAG =/g' config.mk.in
 
 EOF
 
+PNG_CFLAGS="-Dpm_strfree=free -Dpm_asprintf=asprintf -Dpm_optParseOptions3=optParseOptions3"
+
 TOP=`pwd`
 make \
     CC="%{__cc}" \
     LDFLAGS="-L$TOP/pbm -L$TOP/pgm -L$TOP/pnm -L$TOP/ppm %ldflags" \
-    CFLAGS="$CFLAGS -fPIC" \
+    CFLAGS="$CFLAGS -fPIC $PNG_CFLAGS" \
     LADD="-lm" \
     TIFFLIB_DIR=%{_libdir} TIFFLIB=-ltiff TIFFINC_DIR=%{_includedir} TIFFHDR_DIR=%{_includedir} \
     JPEGLIB_DIR=%{_libdir} JPEGLIB=-ljpeg JPEGHDR_DIR=%{_includedir} JPEGINC_DIR=%{_includedir} \
