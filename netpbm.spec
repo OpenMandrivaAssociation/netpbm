@@ -153,7 +153,7 @@ sed -i -e 's/^SUBDIRS = libjasper/SUBDIRS =/' converter/other/jpeg2000/Makefile
 
 %build
 %serverbuild
-
+export CFLAGS="$CFLAGS -fPIC -flax-vector-conversions -fno-strict-aliasing"
 
 ./configure <<EOF
 
