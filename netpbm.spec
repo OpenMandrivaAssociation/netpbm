@@ -251,14 +251,6 @@ cp test-images/* %{buildroot}%{_datadir}/printconf/tests/
 
 %multiarch_includes %{buildroot}%{_includedir}/netpbm/pm_config.h
 
-%if %mdkversion < 200900
-%post   -n %{libname} -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
-
 %clean
 rm -rf %{buildroot}
 
