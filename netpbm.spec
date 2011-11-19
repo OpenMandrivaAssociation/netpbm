@@ -1,12 +1,12 @@
-%define major 10
+%define major 11
 %define libname %mklibname %{name} %{major}
 %define develname %mklibname %{name} -d
 %define staticdevelname %mklibname %{name} -d -s
 
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
-Version:	10.47.30
-Release:	%mkrel 2
+Version:	10.56.03
+Release:	%mkrel 1
 License:	GPL Artistic MIT
 Group:		Graphics
 URL:		http://netpbm.sourceforge.net/
@@ -18,11 +18,6 @@ URL:		http://netpbm.sourceforge.net/
 Source0:	netpbm-%{version}.tar.xz
 Source1:	mf50-netpbm_filters
 Source2:	test-images.tar.bz2
-
-# FIXME - files from netpbm trunk
-Source3:	netpbm-png.tar.bz2
-Patch1000:	netpbm-png.patch
-
 Patch1:		netpbm-time.patch
 Patch2:		netpbm-message.patch
 Patch3:		netpbm-security-scripts.patch
@@ -33,14 +28,12 @@ Patch7:		netpbm-bmptopnm.patch
 Patch8:		netpbm-CAN-2005-2471.patch
 Patch9:		netpbm-xwdfix.patch
 Patch11:	netpbm-multilib.patch
-Patch12:	netpbm-pamscale.patch
 Patch13:	netpbm-glibc.patch
 Patch14:	netpbm-svgtopam.patch
 Patch15:	netpbm-docfix.patch
 Patch16:	netpbm-ppmfadeusage.patch
 Patch17:	netpbm-fiasco-overflow.patch
 Patch18:	netpbm-lz.patch
-Patch19:	netpbm-pnmmontagefix.patch
 Patch20:	netpbm-noppmtompeg.patch
 Patch21:	netpbm-cmuwtopbm.patch
 Patch22:	netpbm-pamtojpeg2k.patch
@@ -115,7 +108,7 @@ netpbm package installed.
 
 %prep
 
-%setup -q -a2 -a3
+%setup -q -a2
 
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
@@ -135,14 +128,12 @@ done
 %patch8 -p1 -b .CAN-2005-2471
 %patch9 -p1 -b .xwdfix
 %patch11 -p1 -b .multilib
-%patch12 -p1 -b .pamscale
 %patch13 -p1 -b .glibc
-%patch14 -p1 -b .svgtopam
+%patch14 -p0 -b .svgtopam
 %patch15 -p1 -b .docfix
 %patch16 -p1 -b .ppmfadeusage
 %patch17 -p1 -b .fiasco-overflow
-%patch18 -p1 -b .lz
-%patch19 -p1 -b .pnmmmontagefix
+%patch18 -p0 -b .lz
 %patch20 -p1 -b .noppmtompeg
 %patch21 -p1 -b .cmuwtopbmfix
 %patch22 -p1 -b .pamtojpeg2kfix
@@ -150,12 +141,13 @@ done
 
 %patch100 -p1 -b .format_not_a_string_literal_and_no_format_arguments
 
-%patch1000 -p1
-
 sed -i 's/STRIPFLAG = -s/STRIPFLAG =/g' config.mk.in
 
 ##mv shhopt/shhopt.h shhopt/pbmshhopt.h
 ##perl -pi -e 's|shhopt.h|pbmshhopt.h|g' `find -name "*.c" -o -name "*.h"` ./GNUmakefile
+
+rm -rf converter/other/jpeg2000/libjasper/
+sed -i -e 's/^SUBDIRS = libjasper/SUBDIRS =/' converter/other/jpeg2000/Makefile
 
 %build
 %serverbuild
@@ -183,13 +175,11 @@ sed -i 's/STRIPFLAG = -s/STRIPFLAG =/g' config.mk.in
 
 EOF
 
-PNG_CFLAGS="-Dpm_strfree=free -Dpm_asprintf=asprintf -Dpm_optParseOptions3=optParseOptions3"
-
 TOP=`pwd`
 make \
     CC="%{__cc}" \
     LDFLAGS="-L$TOP/pbm -L$TOP/pgm -L$TOP/pnm -L$TOP/ppm %ldflags" \
-    CFLAGS="$CFLAGS -fPIC $PNG_CFLAGS" \
+    CFLAGS="$CFLAGS -fPIC -flax-vector-conversions -fno-strict-aliasing" \
     LADD="-lm" \
     TIFFLIB_DIR=%{_libdir} TIFFLIB=-ltiff TIFFINC_DIR=%{_includedir} TIFFHDR_DIR=%{_includedir} \
     JPEGLIB_DIR=%{_libdir} JPEGLIB=-ljpeg JPEGHDR_DIR=%{_includedir} JPEGINC_DIR=%{_includedir} \
