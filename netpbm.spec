@@ -38,6 +38,7 @@ Patch20:	netpbm-noppmtompeg.patch
 Patch21:	netpbm-cmuwtopbm.patch
 Patch22:	netpbm-pamtojpeg2k.patch
 Patch23:	netpbm-manfix.patch
+Patch24:	netpbm-10.56.03-linkage_fix.diff
 Patch100:	netpbm-10.35.57-format_not_a_string_literal_and_no_format_arguments.diff
 Requires:	%{libname} = %{version}
 BuildRequires:	flex
@@ -138,6 +139,7 @@ done
 %patch21 -p1 -b .cmuwtopbmfix
 %patch22 -p1 -b .pamtojpeg2kfix
 %patch23 -p1 -b .manfix
+%patch24 -p0 -b .linkage_fix
 
 %patch100 -p1 -b .format_not_a_string_literal_and_no_format_arguments
 
@@ -175,19 +177,25 @@ sed -i -e 's/^SUBDIRS = libjasper/SUBDIRS =/' converter/other/jpeg2000/Makefile
 
 EOF
 
+# bork
+perl -pi -e "s|^MATHLIB.*|MATHLIB=-L%{_libdir} -lm|g" common.mk
+perl -pi -e "s|^LDSHLIB = -shared |LDSHLIB = -Wl,-shared -fPIC |g" config.mk
+
 TOP=`pwd`
 make \
     CC="%{__cc}" \
-    LDFLAGS="-L$TOP/pbm -L$TOP/pgm -L$TOP/pnm -L$TOP/ppm %ldflags" \
+    LDFLAGS="-L$TOP/pbm -L$TOP/pgm -L$TOP/pnm -L$TOP/ppm -L%{_libdir} %ldflags" \
     CFLAGS="$CFLAGS -fPIC -flax-vector-conversions -fno-strict-aliasing" \
-    LADD="-lm" \
+    CFLAGS_SHLIB="$CFLAGS -fPIC -flax-vector-conversions -fno-strict-aliasing" \
+    SHLIB_CLIB="-L%{_libdir} -lc" \
+    MATHLIB="-L%{_libdir} -lm" \
     TIFFLIB_DIR=%{_libdir} TIFFLIB=-ltiff TIFFINC_DIR=%{_includedir} TIFFHDR_DIR=%{_includedir} \
     JPEGLIB_DIR=%{_libdir} JPEGLIB=-ljpeg JPEGHDR_DIR=%{_includedir} JPEGINC_DIR=%{_includedir} \
-    PNGLIB_DIR=%{_libdir} PNGLIB=-lpng PNGINC_DIR=%{_includedir} PNGHDR_DIR=%{_includedir} \
-    ZLIB_DIR=%{_libdir} ZLIB=-lz ZHDR_DIR=%{_includedir} \
-    X11LIB_DIR=%{_libdir} X11LIB=-lX11 X11INC_DIR=%{_includedir} X11HDR_DIR=%{_includedir} \
-    JBIGLIB_DIR=%{_libdir} JBIGLIB=-ljbig JBIGHDR_DIR=%{_includedir} JBIGHDR_DIR=%{_includedir} \
-    JASPERLIB_DIR=%{_libdir} JASPERLIB=-ljasper JASPERHDR_DIR=%{_includedir} JASPERDEPLIBS=-ljpeg \
+    PNGLIB_DIR=%{_libdir} PNGLIB="-L%{_libdir} -lpng" PNGINC_DIR=%{_includedir} PNGHDR_DIR=%{_includedir} \
+    ZLIB_DIR=%{_libdir} ZLIB="-L%{_libdir} -lz" ZHDR_DIR=%{_includedir} \
+    X11LIB_DIR=%{_libdir} X11LIB="-L%{_libdir} -lX11" X11INC_DIR=%{_includedir} X11HDR_DIR=%{_includedir} \
+    JBIGLIB_DIR=%{_libdir} JBIGLIB="-L%{_libdir} -ljbig" JBIGHDR_DIR=%{_includedir} JBIGHDR_DIR=%{_includedir} \
+    JASPERLIB_DIR=%{_libdir} JASPERLIB="-L%{_libdir} -ljasper" JASPERHDR_DIR=%{_includedir} JASPERDEPLIBS="-L%{_libdir} -ljpeg" \
     XML2LIBS="NONE" LINUXSVGALIB="NONE"
 
 # prepare man files
