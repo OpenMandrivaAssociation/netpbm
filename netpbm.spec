@@ -177,18 +177,12 @@ export CFLAGS="$CFLAGS -fPIC -flax-vector-conversions -fno-strict-aliasing"
 
 EOF
 
-# bork
-perl -pi -e "s|^MATHLIB.*|MATHLIB=-L%{_libdir} -lm|g" common.mk
-perl -pi -e "s|^LDSHLIB = -shared |LDSHLIB = -Wl,-shared -fPIC |g" config.mk
-
 TOP=`pwd`
 make \
     CC="%{__cc}" \
-    LDFLAGS="-L$TOP/pbm -L$TOP/pgm -L$TOP/pnm -L$TOP/ppm -L%{_libdir} %ldflags" \
-    CFLAGS="$CFLAGS -fPIC -flax-vector-conversions -fno-strict-aliasing" \
-    CFLAGS_SHLIB="$CFLAGS -fPIC -flax-vector-conversions -fno-strict-aliasing" \
-    SHLIB_CLIB="-L%{_libdir} -lc" \
-    MATHLIB="-L%{_libdir} -lm" \
+    LDFLAGS="-L$TOP/pbm -L$TOP/pgm -L$TOP/pnm -L$TOP/ppm %ldflags" \
+    CFLAGS_SHLIB="-fPIC" \
+    MATHLIB="-lm" \
     TIFFLIB_DIR=%{_libdir} TIFFLIB=-ltiff TIFFINC_DIR=%{_includedir} TIFFHDR_DIR=%{_includedir} \
     JPEGLIB_DIR=%{_libdir} JPEGLIB=-ljpeg JPEGHDR_DIR=%{_includedir} JPEGINC_DIR=%{_includedir} \
     PNGLIB_DIR=%{_libdir} PNGLIB="-L%{_libdir} -lpng" PNGINC_DIR=%{_includedir} PNGHDR_DIR=%{_includedir} \
