@@ -5,8 +5,8 @@
 
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
-Version:	10.56.03
-Release:	%mkrel 1
+Version:	10.56.04
+Release:	1
 License:	GPL Artistic MIT
 Group:		Graphics
 URL:		http://netpbm.sourceforge.net/
@@ -40,7 +40,7 @@ Patch22:	netpbm-pamtojpeg2k.patch
 Patch23:	netpbm-manfix.patch
 Patch24:	netpbm-10.56.03-linkage_fix.diff
 Patch100:	netpbm-10.35.57-format_not_a_string_literal_and_no_format_arguments.diff
-Requires:	%{libname} = %{version}
+Requires:	%{libname} >= %{version}
 BuildRequires:	flex
 BuildRequires:	jasper-devel
 BuildRequires:	jbig-devel
@@ -55,7 +55,6 @@ BuildRequires:	python-devel
 BuildRequires:	tiff-devel
 BuildRequires:	libx11-devel
 BuildConflicts:	svgalib-devel
-Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 The netpbm package contains a library of functions which support programs for
@@ -76,7 +75,7 @@ others.
 %package -n	%{develname}
 Summary:	Development tools for programs which will use the netpbm libraries
 Group:		Development/C
-Requires:	%{libname} = %{version}
+Requires:	%{libname} >= %{version}
 Provides:	lib%{name}-devel = %{version}-%{release}
 Provides:	netpbm-devel = %{version}-%{release}
 Obsoletes:	%{mklibname netpbm 10 -d}
@@ -93,7 +92,7 @@ netpbm package installed.
 %package -n	%{staticdevelname}
 Summary:	Static libraries for the netpbm libraries
 Group:		Development/C
-Requires:	%{develname} = %{version}
+Requires:	%{develname} >= %{version}
 Provides:	lib%{name}-static-devell = %{version}-%{release}
 Provides:	netpbm-static-devel = %{version}-%{release}
 Obsoletes:	%{mklibname netpbm 10 -d -s}
@@ -180,7 +179,7 @@ EOF
 TOP=`pwd`
 make \
     CC="%{__cc}" \
-    LDFLAGS="-L$TOP/pbm -L$TOP/pgm -L$TOP/pnm -L$TOP/ppm %ldflags" \
+    LDFLAGS="-L$TOP/pbm -L$TOP/pgm -L$TOP/pnm -L$TOP/ppm %{ldflags}" \
     CFLAGS_SHLIB="-fPIC" \
     MATHLIB="-lm" \
     TIFFLIB_DIR=%{_libdir} TIFFLIB=-ltiff TIFFINC_DIR=%{_includedir} TIFFHDR_DIR=%{_includedir} \
@@ -206,7 +205,7 @@ done
 rm -rf %{buildroot}
 
 install -d %{buildroot}
-make package pkgdir=%{buildroot}%{_prefix} XML2LIBS="NONE" LINUXSVGALIB="NONE"
+make package PKGDIR=%{buildroot}%{_prefix} XML2LIBS="NONE" LINUXSVGALIB="NONE"
 
 # Ugly hack to have libs in correct dir on 64bit archs.
 install -d %{buildroot}%{_libdir}
@@ -251,11 +250,7 @@ cp test-images/* %{buildroot}%{_datadir}/printconf/tests/
 
 %multiarch_includes %{buildroot}%{_includedir}/netpbm/pm_config.h
 
-%clean
-rm -rf %{buildroot}
-
 %files
-%defattr(-,root,root)
 %attr(0755,root,root) %{_bindir}/*
 %{_datadir}/%{name}-%{version}
 %dir %{_datadir}/printconf
@@ -266,12 +261,10 @@ rm -rf %{buildroot}
 %{_mandir}/man[15]/*
 
 %files -n %{libname}
-%defattr(-,root,root)
 %doc doc/*
 %attr(0755,root,root) %{_libdir}/lib*.so.%{major}*
 
 %files -n %{develname}
-%defattr(-,root,root)
 %dir %{_includedir}/netpbm
 %{_includedir}/netpbm/*.h
 %{multiarch_includedir}/netpbm/pm_config.h
@@ -279,5 +272,4 @@ rm -rf %{buildroot}
 %{_mandir}/man3/*
 
 %files -n %{staticdevelname}
-%defattr(-,root,root)
 %attr(0644,root,root) %{_libdir}/*.a
