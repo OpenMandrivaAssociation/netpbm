@@ -1,11 +1,10 @@
 %define major 11
 %define libname %mklibname %{name} %{major}
 %define develname %mklibname %{name} -d
-%define staticdevelname %mklibname %{name} -d -s
 
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
-Version:	10.56.04
+Version:	10.56.05
 Release:	1
 License:	GPL Artistic MIT
 Group:		Graphics
@@ -84,23 +83,6 @@ Obsoletes:	%{mklibname netpbm 10 -d}
 The netpbm-devel package contains the header files and programmer's
 documentation for developing programs which can handle the various graphics
 file formats supported by the netpbm libraries.
-
-Install netpbm-devel if you want to develop programs for handling the graphics
-file formats supported by the netpbm libraries. You'll also need to have the
-netpbm package installed.
-
-%package -n	%{staticdevelname}
-Summary:	Static libraries for the netpbm libraries
-Group:		Development/C
-Requires:	%{develname} >= %{version}
-Provides:	lib%{name}-static-devell = %{version}-%{release}
-Provides:	netpbm-static-devel = %{version}-%{release}
-Obsoletes:	%{mklibname netpbm 10 -d -s}
-
-%description -n	%{staticdevelname}
-The netpbm-devel package contains the static libraries (.a) for developing
-programs which can handle the various graphics file formats supported by the
-netpbm libraries.
 
 Install netpbm-devel if you want to develop programs for handling the graphics
 file formats supported by the netpbm libraries. You'll also need to have the
@@ -213,7 +195,6 @@ if [ "%{_libdir}" != "%{_prefix}/lib" ]; then
     mv %{buildroot}%{_prefix}/lib/lib* %{buildroot}%{_libdir}
 fi
 
-install -m0644 lib/libnetpbm.a %{buildroot}%{_libdir}/libnetpbm.a
 ln -sf libnetpbm.so.%{major} %{buildroot}%{_libdir}/libnetpbm.so
 
 # fix manpages
@@ -270,6 +251,3 @@ cp test-images/* %{buildroot}%{_datadir}/printconf/tests/
 %{multiarch_includedir}/netpbm/pm_config.h
 %attr(0755,root,root) %{_libdir}/lib*.so
 %{_mandir}/man3/*
-
-%files -n %{staticdevelname}
-%attr(0644,root,root) %{_libdir}/*.a
