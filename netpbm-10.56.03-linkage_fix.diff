@@ -1,0 +1,43 @@
+--- lib/Makefile	2011-11-11 06:23:41.000000000 -0500
++++ lib/Makefile.oden	2011-11-19 10:49:41.850014452 -0500
+@@ -107,10 +107,10 @@
+ $(SONAME): \
+     $(LIBOBJECTS) $(LIBOBJECTS_X) 
+ 	$(LD) $(LDSHLIB) -o $@ $(LIBOBJECTS) $(LIBOBJECTS_X) \
+-          -lc \
++          $(SHLIB_CLIB) \
+ 	  -soname libnetpbm.$(NETPBMLIBSUFFIX) \
+ 	  -set_version $(shell perl -e '$(PERLPROG)') \
+-	  $(LADD)
++	  $(MATHLIB)
+ endif
+ 
+ ifeq ($(NETPBMLIBTYPE),unixshared)
+@@ -126,7 +126,7 @@
+ 	$(SYMLINK) $< $@
+ libnetpbm.$(NETPBMLIBSUFFIX).$(MAJ).$(MIN): $(LIBOBJECTS) $(LIBOBJECTS_X)
+ 	$(LD) $(LDSHLIB) -o $@ $(LIBOBJECTS) $(LIBOBJECTS_X) \
+-          $(SHLIB_CLIB) -lm $(LADD)
++          $(SHLIB_CLIB) $(MATHLIB)
+ endif
+ 
+ ifeq ($(NETPBMLIBTYPE),dll)
+@@ -153,7 +153,7 @@
+ 
+ libnetpbm.$(MAJ).$(MIN).dylib: $(LIBOBJECTS) $(LIBOBJECTS_X) 
+ 	$(LD) $(LDSHLIB) -o $@ $(LIBOBJECTS) $(LIBOBJECTS_X) \
+-           -lc $(LADD)
++           $(SHLIB_CLIB) $(MATHLIB)
+ endif
+ 
+ #--------------------------------------------------------------------------
+--- converter/pbm/pbmtoppa/Makefile	2011-11-11 06:23:54.000000000 -0500
++++ converter/pbm/pbmtoppa/Makefile.oden	2011-11-19 10:57:57.610011959 -0500
+@@ -20,6 +20,6 @@
+ 
+ pbmtoppa: $(OBJECTS) $(NETPBMLIB) $(LIBOPT)
+ 	$(LD) -o pbmtoppa $(OBJECTS) \
+-	  -lm $(shell $(LIBOPT) $(NETPBMLIB)) $(LDFLAGS) $(LDLIBS) \
++	  $(MATHLIB) $(shell $(LIBOPT) $(NETPBMLIB)) $(LDFLAGS) $(LDLIBS) \
+ 	  $(RPATH) $(LADD)
+ 

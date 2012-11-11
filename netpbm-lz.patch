@@ -1,0 +1,16 @@
+--- converter/other/Makefile	2011-11-19 12:05:44.000000000 +0100
++++ converter/other/Makefile.oden	2011-11-19 12:08:13.589404165 +0100
+@@ -179,11 +179,11 @@
+ 
+ ifneq ($(shell $(TEST_PKGCONFIG_LIBPNG)),)
+   # pkg-config libpng works on this system
+-  PNGLIB_LIBOPTS = $(shell pkg-config libpng$(PNGVER) --libs)
++  PNGLIB_LIBOPTS = $(shell pkg-config libpng$(PNGVER) --libs) -lz
+ else
+   ifneq ($(shell libpng$(PNGVER)-config --version),)
+     # No pkg-config, but we have libpng-config on this system
+-    PNGLIB_LIBOPTS = $(shell libpng$(PNGVER)-config --ldflags)
++    PNGLIB_LIBOPTS = $(shell libpng$(PNGVER)-config --ldflags) -lz
+   else
+     # System can't tell us where libpng is; use stuff from config.mk
+     PNGLIB_LIBOPTS = $(shell $(LIBOPT) $(LIBOPTR) $(PNGLIB) $(ZLIB))
