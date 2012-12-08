@@ -1,0 +1,12 @@
+#
+# netpbm magicfilter rules
+#
+/p[gbp]m/		pipe/postscript/	/usr/bin/pnmtops -quiet
+/gif/			pipe/p[gbp]m/		/usr/bin/giftopnm
+/jpeg/			pipe/p[gbp]m/		/usr/bin/djpeg -pnm
+/png/			pipe/p[gbp]m/		/usr/bin/pngtopnm
+/TIFF image/		fpipe/p[gbp]m/		/usr/bin/tifftopnm $FILE
+/PC bitmap data/	pipe/p[gbp]m/		/usr/bin/bmptoppm
+/Sun raster image/	pipe/p[gbp]m/		/usr/bin/rasttopnm
+/SGI image data/	pipe/p[gbp]m/		/usr/bin/sgitopnm
+
