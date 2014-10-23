@@ -7,7 +7,7 @@
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
 Version:	10.57.01
-Release:	8
+Release:	9
 License:	GPL Artistic MIT
 Group:		Graphics
 Url:		http://netpbm.sourceforge.net/
@@ -124,6 +124,9 @@ rm -rf converter/other/jpeg2000/libjasper/
 sed -i -e 's/^SUBDIRS = libjasper/SUBDIRS =/' converter/other/jpeg2000/Makefile
 
 %build
+export CC=gcc
+export CXX=g++
+
 %serverbuild
 export CFLAGS="$CFLAGS -fPIC -flax-vector-conversions -fno-strict-aliasing"
 
