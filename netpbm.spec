@@ -1,4 +1,5 @@
 %define debug_package %{nil}
+%define _disable_ld_no_undefined 1
 
 %define major	11
 %define libname %mklibname %{name} %{major}
@@ -6,14 +7,15 @@
 
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
-Version:	10.57.01
-Release:	9
+Version:	10.68.01
+Release:	1
 License:	GPL Artistic MIT
 Group:		Graphics
 Url:		http://netpbm.sourceforge.net/
 # Source0 is prepared by
-# svn checkout https://netpbm.svn.sourceforge.net/svnroot/netpbm/stable netpbm-%{version}
+# svn checkout https://netpbm.svn.sourceforge.net/svnroot/netpbm/advanced netpbm-%{version}
 # svn checkout https://netpbm.svn.sourceforge.net/svnroot/netpbm/userguide netpbm-%{version}/userguide
+# svn checkout https://netpbm.svn.sourceforge.net/svnroot/netpbm/trunk/test netpbm-%{version}/test
 # and removing the .svn directories ( find -name "\.svn" -type d -print0 | xargs -0 rm -rf )
 # and removing the ppmtompeg code, due to patents ( rm -rf netpbm-%{version}/converter/ppm/ppmtompeg/ )
 Source0:	%{name}-%{version}.tar.xz
@@ -30,7 +32,6 @@ Patch8:		netpbm-CAN-2005-2471.patch
 Patch9:		netpbm-xwdfix.patch
 Patch11:	netpbm-multilib.patch
 Patch13:	netpbm-glibc.patch
-Patch14:	netpbm-svgtopam.patch
 Patch15:	netpbm-docfix.patch
 Patch16:	netpbm-ppmfadeusage.patch
 Patch17:	netpbm-fiasco-overflow.patch
@@ -38,10 +39,8 @@ Patch18:	netpbm-lz.patch
 Patch20:	netpbm-noppmtompeg.patch
 Patch21:	netpbm-cmuwtopbm.patch
 Patch22:	netpbm-pamtojpeg2k.patch
-Patch23:	netpbm-manfix.patch
-Patch24:	netpbm-10.56.03-linkage_fix.diff
-Patch100:	netpbm-10.35.57-format_not_a_string_literal_and_no_format_arguments.diff
-
+Patch100:	netpbm-10.68.01-stdio.patch
+Patch101:	netpbm-10.68.01-link.patch
 BuildRequires:	flex
 BuildRequires:	jbig-devel
 BuildRequires:	jpeg-devel
@@ -102,7 +101,6 @@ done
 %patch9 -p1 -b .xwdfix
 %patch11 -p1 -b .multilib
 %patch13 -p1 -b .glibc
-%patch14 -p0 -b .svgtopam
 %patch15 -p1 -b .docfix
 %patch16 -p1 -b .ppmfadeusage
 %patch17 -p1 -b .fiasco-overflow
@@ -110,11 +108,9 @@ done
 %patch20 -p1 -b .noppmtompeg
 %patch21 -p1 -b .cmuwtopbmfix
 %patch22 -p1 -b .pamtojpeg2kfix
-%patch23 -p1 -b .manfix
-%patch24 -p0 -b .linkage_fix
 
-%patch100 -p1 -b .format_not_a_string_literal_and_no_format_arguments
-
+%patch100 -p1 -b .jpeglib
+%patch101 -p1 -b .link
 sed -i 's/STRIPFLAG = -s/STRIPFLAG =/g' config.mk.in
 
 ##mv shhopt/shhopt.h shhopt/pbmshhopt.h
@@ -154,7 +150,7 @@ EOF
 
 TOP=`pwd`
 make \
-    CC="%{__cc}" \
+    CC="gcc" \
     LDFLAGS="-L$TOP/pbm -L$TOP/pgm -L$TOP/pnm -L$TOP/ppm %{ldflags}" \
     CFLAGS_SHLIB="-fPIC" \
     MATHLIB="-lm" \
@@ -170,7 +166,7 @@ make \
 # prepare man files
 cd userguide
 for i in *.html ; do
-    ../buildtools/makeman ${i}
+    %__python2 ../buildtools/makeman ${i}
 done
 for i in 1 3 5 ; do
     mkdir -p man/man${i}
@@ -213,6 +209,7 @@ rm -rf %{buildroot}%{_prefix}/misc
 rm -rf %{buildroot}%{_prefix}/man
 rm -rf %{buildroot}%{_prefix}/pkginfo
 rm -rf %{buildroot}%{_prefix}/config_template
+rm -rf %{buildroot}%{_prefix}/pkgconfig_template
 rm -f %{buildroot}%{_mandir}/man1/ppmtompeg.1*
 
 install -d %{buildroot}%{_datadir}/printconf/mf_rules

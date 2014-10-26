@@ -1,3 +1,5 @@
+removed_sources:
+  netpbm-10.57.01.tar.xz: 939024f7d896131f1ef98c5d55bcc8e269fff59a
 sources:
-  "netpbm-10.57.01.tar.xz": 939024f7d896131f1ef98c5d55bcc8e269fff59a
-  "test-images.tar.bz2": 07a861df89e24dc77fb62554c5daba2ae805b050
+  netpbm-10.68.01.tar.xz: 30bfd83ad659d04871e73712226f979d62c3b24f
+  test-images.tar.bz2: 07a861df89e24dc77fb62554c5daba2ae805b050

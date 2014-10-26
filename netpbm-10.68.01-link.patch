@@ -1,0 +1,7 @@
+--- netpbm-10.68.01/converter/other/cameratopam/Makefile.orig	2014-10-26 22:47:07.529114334 +0000
++++ netpbm-10.68.01/converter/other/cameratopam/Makefile	2014-10-26 22:47:57.152110678 +0000
+@@ -36,3 +36,4 @@
+ include $(SRCDIR)/common.mk
+ 
+ cameratopam: $(ADDL_OBJECTS)
++cameratopam: LDFLAGS_TARGET = $(shell $(LIBOPT) $(LIBOPTR) $(JPEGLIB))
