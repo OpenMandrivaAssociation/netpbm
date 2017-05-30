@@ -7,8 +7,8 @@
 
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
-Version:	10.68.01
-Release:	5
+Version:	10.78.04
+Release:	1
 License:	GPL Artistic MIT
 Group:		Graphics
 Url:		http://netpbm.sourceforge.net/
@@ -21,26 +21,13 @@ Url:		http://netpbm.sourceforge.net/
 Source0:	%{name}-%{version}.tar.xz
 Source1:	mf50-netpbm_filters
 Source2:	test-images.tar.bz2
-Patch1:		netpbm-time.patch
-Patch2:		netpbm-message.patch
-Patch3:		netpbm-security-scripts.patch
-Patch4:		netpbm-security-code.patch
-Patch5:		netpbm-nodoc.patch
-Patch6:		netpbm-gcc4.patch
-Patch7:		netpbm-bmptopnm.patch
-Patch8:		netpbm-CAN-2005-2471.patch
-Patch9:		netpbm-xwdfix.patch
-Patch11:	netpbm-multilib.patch
-Patch13:	netpbm-glibc.patch
-Patch15:	netpbm-docfix.patch
-Patch16:	netpbm-ppmfadeusage.patch
-Patch17:	netpbm-fiasco-overflow.patch
-Patch18:	netpbm-lz.patch
-Patch20:	netpbm-noppmtompeg.patch
-Patch21:	netpbm-cmuwtopbm.patch
-Patch22:	netpbm-pamtojpeg2k.patch
-Patch100:	netpbm-10.68.01-stdio.patch
-Patch101:	netpbm-10.68.01-link.patch
+Patch0:		http://pkgs.fedoraproject.org/cgit/rpms/netpbm.git/plain/netpbm-CVE-2017-2586.patch
+Patch1:		http://pkgs.fedoraproject.org/cgit/rpms/netpbm.git/plain/netpbm-CVE-2017-2587.patch
+Patch2:		http://pkgs.fedoraproject.org/cgit/rpms/netpbm.git/plain/netpbm-noppmtompeg.patch
+Patch3:		http://pkgs.fedoraproject.org/cgit/rpms/netpbm.git/plain/netpbm-ppmfadeusage.patch
+Patch4:		http://pkgs.fedoraproject.org/cgit/rpms/netpbm.git/plain/netpbm-security-code.patch
+Patch5:		http://pkgs.fedoraproject.org/cgit/rpms/netpbm.git/plain/netpbm-security-scripts.patch
+
 BuildRequires:	flex
 BuildRequires:	jbig-devel
 BuildRequires:	jpeg-devel
@@ -81,50 +68,16 @@ file formats supported by the netpbm libraries.
 
 %prep
 %setup -q -a2
-
-find . -type d -perm 0700 -exec chmod 755 {} \;
-find . -type f -perm 0555 -exec chmod 755 {} \;
-find . -type f -perm 0444 -exec chmod 644 {} \;
-
-for i in `find . -type d -name CVS` `find . -type f -name .cvs\*` `find . -type f -name .#\*`; do
-    if [ -e "$i" ]; then rm -rf $i; fi >&/dev/null
-done
-
-%patch1 -p1 -b .time
-%patch2 -p1 -b .message
-%patch3 -p1 -b .security-scripts
-%patch4 -p1 -b .security-code
-%patch5 -p1 -b .nodoc
-%patch6 -p1 -b .gcc4
-%patch7 -p1 -b .bmptopnm
-%patch8 -p1 -b .CAN-2005-2471
-%patch9 -p1 -b .xwdfix
-%patch11 -p1 -b .multilib
-%patch13 -p1 -b .glibc
-%patch15 -p1 -b .docfix
-%patch16 -p1 -b .ppmfadeusage
-%patch17 -p1 -b .fiasco-overflow
-%patch18 -p0 -b .lz
-%patch20 -p1 -b .noppmtompeg
-%patch21 -p1 -b .cmuwtopbmfix
-%patch22 -p1 -b .pamtojpeg2kfix
-
-%patch100 -p1 -b .jpeglib
-%patch101 -p1 -b .link
-sed -i 's/STRIPFLAG = -s/STRIPFLAG =/g' config.mk.in
-
-##mv shhopt/shhopt.h shhopt/pbmshhopt.h
-##perl -pi -e 's|shhopt.h|pbmshhopt.h|g' `find -name "*.c" -o -name "*.h"` ./GNUmakefile
-
-rm -rf converter/other/jpeg2000/libjasper/
-sed -i -e 's/^SUBDIRS = libjasper/SUBDIRS =/' converter/other/jpeg2000/Makefile
+%apply_patches
 
 %build
-export CC=gcc
-export CXX=g++
+#export CC=gcc
+#export CXX=g++
 
 %serverbuild
 export CFLAGS="$CFLAGS -fPIC -flax-vector-conversions -fno-strict-aliasing"
+
+find . -name Makefile |xargs sed -i -e 's,\$(AR) -rc,$(AR) rc,g'
 
 ./configure <<EOF
 
@@ -149,19 +102,23 @@ export CFLAGS="$CFLAGS -fPIC -flax-vector-conversions -fno-strict-aliasing"
 EOF
 
 TOP=`pwd`
-make \
-    CC="gcc" \
-    LDFLAGS="-L$TOP/pbm -L$TOP/pgm -L$TOP/pnm -L$TOP/ppm %{ldflags}" \
-    CFLAGS_SHLIB="-fPIC" \
-    MATHLIB="-lm" \
-    TIFFLIB_DIR=%{_libdir} TIFFLIB=-ltiff TIFFINC_DIR=%{_includedir} TIFFHDR_DIR=%{_includedir} \
-    JPEGLIB_DIR=%{_libdir} JPEGLIB=-ljpeg JPEGHDR_DIR=%{_includedir} JPEGINC_DIR=%{_includedir} \
-    PNGLIB_DIR=%{_libdir} PNGLIB="-L%{_libdir} -lpng" PNGINC_DIR=%{_includedir} PNGHDR_DIR=%{_includedir} \
-    ZLIB_DIR=%{_libdir} ZLIB="-L%{_libdir} -lz" ZHDR_DIR=%{_includedir} \
-    X11LIB_DIR=%{_libdir} X11LIB="-L%{_libdir} -lX11" X11INC_DIR=%{_includedir} X11HDR_DIR=%{_includedir} \
-    JBIGLIB_DIR=%{_libdir} JBIGLIB="-L%{_libdir} -ljbig" JBIGHDR_DIR=%{_includedir} JBIGHDR_DIR=%{_includedir} \
-    JASPERLIB_DIR=%{_libdir} JASPERLIB="-L%{_libdir} -ljasper" JASPERHDR_DIR=%{_includedir} JASPERDEPLIBS="-L%{_libdir} -ljpeg" \
-    XML2LIBS="NONE" LINUXSVGALIB="NONE"
+%make \
+	CC="%{__cc}" \
+	CFLAGS="$RPM_OPT_FLAGS -fPIC -flax-vector-conversions -fno-strict-aliasing" \
+	CFLAGS_FOR_BUILD="$RPM_OPT_FLAGS -fPIC -flax-vector-conversions -fno-strict-aliasing" \
+	LDFLAGS="-flto" \
+	LADD="-flto -lm" \
+	JASPERLIB=-ljasper \
+	JASPERHDR_DIR=%{_includedir} \
+	JPEGINC_DIR=%{_includedir} \
+	PNGINC_DIR=%{_includedir} \
+	TIFFINC_DIR=%{_includedir} \
+	JPEGLIB_DIR=%{_libdir} \
+	PNGLIB_DIR=%{_libdir} \
+	TIFFLIB_DIR=%{_libdir} \
+	LINUXSVGALIB="NONE" \
+	X11LIB=%{_libdir}/libX11.so \
+	XML2LIBS="NONE"
 
 # prepare man files
 cd userguide
