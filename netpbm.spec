@@ -7,25 +7,22 @@
 
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
-Version:	10.78.04
-Release:	2
+Version:	10.84.03
+Release:	1
 License:	GPL Artistic MIT
 Group:		Graphics
 Url:		http://netpbm.sourceforge.net/
 # Source0 is prepared by
-# svn checkout https://netpbm.svn.sourceforge.net/svnroot/netpbm/advanced netpbm-%{version}
-# svn checkout https://netpbm.svn.sourceforge.net/svnroot/netpbm/userguide netpbm-%{version}/userguide
-# svn checkout https://netpbm.svn.sourceforge.net/svnroot/netpbm/trunk/test netpbm-%{version}/test
+# svn checkout https://svn.code.sf.net/p/netpbm/code/advanced netpbm-%{version}
+# svn checkout https://svn.code.sf.net/p/netpbm/code/userguide netpbm-%{version}/userguide
 # and removing the .svn directories ( find -name "\.svn" -type d -print0 | xargs -0 rm -rf )
 # and removing the ppmtompeg code, due to patents ( rm -rf netpbm-%{version}/converter/ppm/ppmtompeg/ )
 Source0:	%{name}-%{version}.tar.xz
 Source1:	mf50-netpbm_filters
 Source2:	test-images.tar.bz2
-Patch0:		http://pkgs.fedoraproject.org/cgit/rpms/netpbm.git/plain/netpbm-CVE-2017-2586.patch
 Patch1:		http://pkgs.fedoraproject.org/cgit/rpms/netpbm.git/plain/netpbm-CVE-2017-2587.patch
 Patch2:		http://pkgs.fedoraproject.org/cgit/rpms/netpbm.git/plain/netpbm-noppmtompeg.patch
 Patch3:		http://pkgs.fedoraproject.org/cgit/rpms/netpbm.git/plain/netpbm-ppmfadeusage.patch
-Patch4:		http://pkgs.fedoraproject.org/cgit/rpms/netpbm.git/plain/netpbm-security-code.patch
 Patch5:		http://pkgs.fedoraproject.org/cgit/rpms/netpbm.git/plain/netpbm-security-scripts.patch
 
 BuildRequires:	flex
@@ -123,7 +120,8 @@ TOP=`pwd`
 # prepare man files
 cd userguide
 for i in *.html ; do
-    %__python2 ../buildtools/makeman ${i}
+    [ "$i" = "pammixmulti.html" ] && continue
+    %__python ../buildtools/makeman ${i}
 done
 for i in 1 3 5 ; do
     mkdir -p man/man${i}
@@ -175,8 +173,6 @@ cp %{SOURCE1} %{buildroot}%{_datadir}/printconf/mf_rules/
 install -d %{buildroot}%{_datadir}/printconf/tests
 cp test-images/* %{buildroot}%{_datadir}/printconf/tests/
 
-%multiarch_includes %{buildroot}%{_includedir}/netpbm/pm_config.h
-
 %files
 %{_bindir}/*
 %{_datadir}/%{name}-%{version}
@@ -194,7 +190,6 @@ cp test-images/* %{buildroot}%{_datadir}/printconf/tests/
 %doc doc/*
 %dir %{_includedir}/netpbm
 %{_includedir}/netpbm/*.h
-%{multiarch_includedir}/netpbm/pm_config.h
 %{_libdir}/lib*.so
 %{_mandir}/man3/*
 
