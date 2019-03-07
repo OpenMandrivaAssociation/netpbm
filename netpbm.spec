@@ -7,7 +7,7 @@
 
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
-Version:	10.84.03
+Version:	10.85.03
 Release:	1
 License:	GPL Artistic MIT
 Group:		Graphics
@@ -17,7 +17,7 @@ Url:		http://netpbm.sourceforge.net/
 # svn checkout https://svn.code.sf.net/p/netpbm/code/userguide netpbm-%{version}/userguide
 # and removing the .svn directories ( find -name "\.svn" -type d -print0 | xargs -0 rm -rf )
 # and removing the ppmtompeg code, due to patents ( rm -rf netpbm-%{version}/converter/ppm/ppmtompeg/ )
-Source0:	%{name}-%{version}.tar.xz
+Source0:	%{name}-%{version}.tar.gz
 Source1:	mf50-netpbm_filters
 Source2:	test-images.tar.bz2
 Patch1:		http://pkgs.fedoraproject.org/cgit/rpms/netpbm.git/plain/netpbm-CVE-2017-2587.patch
