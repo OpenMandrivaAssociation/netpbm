@@ -118,16 +118,6 @@ TOP=`pwd`
 	XML2LIBS="NONE"
 
 # prepare man files
-cd userguide
-for i in *.html ; do
-    [ "$i" = "pammixmulti.html" ] && continue
-    %__python ../buildtools/makeman ${i}
-done
-for i in 1 3 5 ; do
-    mkdir -p man/man${i}
-    mv *.${i} man/man${i}
-done
-
 %install
 install -d %{buildroot}
 make package PKGDIR=%{buildroot}%{_prefix} XML2LIBS="NONE" LINUXSVGALIB="NONE"
@@ -142,10 +132,6 @@ ln -sf libnetpbm.so.%{major} %{buildroot}%{_libdir}/libnetpbm.so
 
 # fix manpages
 install -d %{buildroot}%{_mandir}
-cp -rp userguide/man/* %{buildroot}%{_mandir}/
-
-# Get rid of the useless non-ascii character in pgmminkowski.1
-sed -i 's/\xa0//' %{buildroot}%{_mandir}/man1/pgmminkowski.1
 
 # Don't ship man pages for non-existent binaries and bogus ones
 for i in hpcdtoppm pcdovtoppm pnmtojbig ppmsvgalib vidtoppm picttoppm jbigtopnm \
@@ -181,7 +167,6 @@ cp test-images/* %{buildroot}%{_datadir}/printconf/tests/
 %dir %{_datadir}/printconf/tests
 %{_datadir}/printconf/mf_rules/*
 %{_datadir}/printconf/tests/*
-%{_mandir}/man[15]/*
 
 %files -n %{libname}
 %{_libdir}/lib*.so.%{major}*
@@ -191,5 +176,4 @@ cp test-images/* %{buildroot}%{_datadir}/printconf/tests/
 %dir %{_includedir}/netpbm
 %{_includedir}/netpbm/*.h
 %{_libdir}/lib*.so
-%{_mandir}/man3/*
 
