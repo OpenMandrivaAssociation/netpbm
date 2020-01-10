@@ -65,7 +65,7 @@ file formats supported by the netpbm libraries.
 
 %prep
 %setup -q -a2
-%apply_patches
+%autopatch -p1
 
 %build
 #export CC=gcc
