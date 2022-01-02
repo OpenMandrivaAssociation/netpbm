@@ -6,19 +6,16 @@
 
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
-Version:	10.85.03
+Version:	10.97.0
 Release:	1
 License:	GPL Artistic MIT
 Group:		Graphics
 Url:		http://netpbm.sourceforge.net/
-# Source0 is prepared by
-# svn checkout https://svn.code.sf.net/p/netpbm/code/advanced netpbm-%{version}
-# svn checkout https://svn.code.sf.net/p/netpbm/code/userguide netpbm-%{version}/userguide
-# and removing the .svn directories ( find -name "\.svn" -type d -print0 | xargs -0 rm -rf )
-# and removing the ppmtompeg code, due to patents ( rm -rf netpbm-%{version}/converter/ppm/ppmtompeg/ )
-Source0:	%{name}-%{version}.tar.gz
+Source0:	%{name}-%{version}.tar.zst
 Source1:	mf50-netpbm_filters
 Source2:	test-images.tar.bz2
+# Used for creating SOURCE0
+Source10:	package-source.sh
 Patch1:		http://pkgs.fedoraproject.org/cgit/rpms/netpbm.git/plain/netpbm-CVE-2017-2587.patch
 Patch2:		http://pkgs.fedoraproject.org/cgit/rpms/netpbm.git/plain/netpbm-noppmtompeg.patch
 Patch3:		http://pkgs.fedoraproject.org/cgit/rpms/netpbm.git/plain/netpbm-ppmfadeusage.patch
@@ -158,6 +155,9 @@ cp %{SOURCE1} %{buildroot}%{_datadir}/printconf/mf_rules/
 install -d %{buildroot}%{_datadir}/printconf/tests
 cp test-images/* %{buildroot}%{_datadir}/printconf/tests/
 
+# Don't ship the nonstandard directory structure
+rm -rf %{buildroot}%{_prefix}/{shared,static}link 
+
 %files
 %{_bindir}/*
 %{_datadir}/%{name}-%{version}
@@ -175,4 +175,3 @@ cp test-images/* %{buildroot}%{_datadir}/printconf/tests/
 %dir %{_includedir}/netpbm
 %{_includedir}/netpbm/*.h
 %{_libdir}/lib*.so
-
