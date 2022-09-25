@@ -6,8 +6,8 @@
 
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
-Version:	10.97.0
-Release:	2
+Version:	10.99.3
+Release:	1
 License:	GPL Artistic MIT
 Group:		Graphics
 Url:		http://netpbm.sourceforge.net/
@@ -19,7 +19,6 @@ Source10:	package-source.sh
 Patch1:		http://pkgs.fedoraproject.org/cgit/rpms/netpbm.git/plain/netpbm-CVE-2017-2587.patch
 Patch2:		http://pkgs.fedoraproject.org/cgit/rpms/netpbm.git/plain/netpbm-noppmtompeg.patch
 Patch3:		http://pkgs.fedoraproject.org/cgit/rpms/netpbm.git/plain/netpbm-ppmfadeusage.patch
-Patch5:		http://pkgs.fedoraproject.org/cgit/rpms/netpbm.git/plain/netpbm-security-scripts.patch
 
 BuildRequires:	flex
 BuildRequires:	jbig-devel
