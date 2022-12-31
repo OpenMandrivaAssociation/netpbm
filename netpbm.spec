@@ -6,7 +6,7 @@
 
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
-Version:	11.0.2
+Version:	11.1.0
 Release:	1
 License:	GPL Artistic MIT
 Group:		Graphics
