@@ -17,4 +17,4 @@ rm -rf netpbm/converter/ppm/ppmtompeg
 
 mv netpbm netpbm-${VERSION}
 tar cf netpbm-${VERSION}.tar netpbm-${VERSION}
-zstd --ultra -22 netpbm-${VERSION}.tar
+zstd --ultra --rm -22 netpbm-${VERSION}.tar
