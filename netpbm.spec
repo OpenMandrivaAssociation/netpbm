@@ -10,7 +10,7 @@ Version:	11.8.0
 Release:	1
 License:	GPL Artistic MIT
 Group:		Graphics
-Url:		http://netpbm.sourceforge.net/
+Url:		https://netpbm.sourceforge.net/
 Source0:	%{name}-%{version}.tar.zst
 Source1:	mf50-netpbm_filters
 Source2:	test-images.tar.bz2
