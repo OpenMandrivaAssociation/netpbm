@@ -19,6 +19,11 @@ Source10:	package-source.sh
 Patch1:		http://pkgs.fedoraproject.org/cgit/rpms/netpbm.git/plain/netpbm-CVE-2017-2587.patch
 Patch2:		http://pkgs.fedoraproject.org/cgit/rpms/netpbm.git/plain/netpbm-noppmtompeg.patch
 
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	flex
 BuildRequires:	jbig-devel
 BuildRequires:	jpeg-devel
