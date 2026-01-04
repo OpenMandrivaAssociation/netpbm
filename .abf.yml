@@ -1,4 +1,5 @@
 sources:
+  netpbm-11.12.0.tar.zst: 665a1ec4d3076ba28dc6d94a28735b2b7976508a
+  netpbm-11.13.0.tar.zst: 3b4f795da3fa7ba176263c944e8d5a4a7d06f98f
   test-images.tar.bz2: 07a861df89e24dc77fb62554c5daba2ae805b050
   version.mk: a1e8b63eccf172591a0fe29b7ed99067231e69b7
-  netpbm-11.12.0.tar.zst: 665a1ec4d3076ba28dc6d94a28735b2b7976508a
