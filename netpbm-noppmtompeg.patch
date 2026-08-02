@@ -1,5 +1,4 @@
 diff --git a/converter/ppm/Makefile b/converter/ppm/Makefile
-index b97349d..f68170f 100644
 --- a/converter/ppm/Makefile
 +++ b/converter/ppm/Makefile
 @@ -7,7 +7,7 @@ VPATH=.:$(SRCDIR)/$(SUBDIR)
