@@ -1,12 +1,13 @@
 %define _disable_ld_no_undefined 1
 
 %define major	11
-%define libname %mklibname %{name} %{major}
+%define oldlibname %mklibname %{name} 11
+%define libname %mklibname %{name}
 %define devname %mklibname %{name} -d
 
 Summary:	Tools for manipulating graphics files in netpbm supported formats
 Name:		netpbm
-Version:	11.15.4
+Version:	11.16.1
 Release:	1
 License:	GPL Artistic MIT
 Group:		Graphics
@@ -56,6 +57,7 @@ Summary:	Development tools for programs which will use the netpbm libraries
 Group:		Development/C
 Requires:	%{libname} >= %{version}
 Provides:	%{name}-devel = %{version}-%{release}
+%rename %{oldlibname}
 
 %description -n	%{devname}
 The netpbm-devel package contains the header files and programmer's

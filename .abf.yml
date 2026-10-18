@@ -1,4 +1,4 @@
 sources:
   test-images.tar.bz2: 07a861df89e24dc77fb62554c5daba2ae805b050
   version.mk: a1e8b63eccf172591a0fe29b7ed99067231e69b7
-  netpbm-11.15.4.tar.zst: 2c2e2e61b79257efee748bfd1ab8c1b9e956d8a0
+  netpbm-11.16.1.tar.zst: 4bdc32035b3338192f0369ed71885844ef7343d8
